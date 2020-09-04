@@ -21,7 +21,7 @@ $ export DEBUG=False
 $ export EMAIL_USER=<the_email_for_sending_reset_password>
 $ export EMAIL_PASSWORD=<password_of_it>
 ```
-But if you do not want to use password reset function you do not need to create those environment variables.
+But if you do not want to use password reset function you do not need to create environment variables related to `EMAIL`.
 
 After installing all the requirements and setting environment variables move to (`cd` into) the project folder _myReddit_ (using `cd myReddit` from command line) and run
 ```
