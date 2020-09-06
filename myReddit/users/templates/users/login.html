@@ -1,24 +1,37 @@
 {% extends "posts/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="content-section">
-        <form method="POST">
-            {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Log In</legend>
-                {{ form|crispy }}
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Login</button>
-                <small class="text-muted ml-2">
-                    <a href="{% url 'password_reset' %}">Forgot password?</a>
-                </small>
+<div class="content-section">
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <div class='oauth-main' style="text-align: center;margin-bottom: 20px;">
+                <div class="row">
+                    <div class="col-md-3 oauth-box">
+                        <a class="btn btn-outline-dark"
+                            href="{% url 'social:begin' 'google-oauth2' %}" role="button"
+                            style="text-transform:none">
+                            <i class="fab fa-google" width="20px" style="margin-bottom:3px; margin-right:5px"></i>
+                            Continue with Google
+                        </a>
+                    </div>
+                </div>
             </div>
-        </form>
-        <div class="border-top pt-3">
-            <small class="text-muted">
-                Don't have an account? <a class="ml-2" href="{% url 'register' %}">Sign Up Now</a>
-            </small>
-        </div>
-    </div>
+            <div class = 'auth-box'style="border-width: 1px; border-style: solid; border-radius: 5px;">
+                <p>{{form|crispy}}</p>
+                <div class="form-group" style="text-align: center;">
+                    <button class="btn btn-outline-info" type="submit">Log In</button>
+                </div>
+                <div class="border-top pt-3">
+                    <small class="text-muted float-left">
+                        <a href="{%url 'password_reset'%}">Forgot Password?</a>
+                    </small>
+                    <small class="text-muted float-right">
+                        Don't have an account? <a class="ml-2" href="{%url 'register'%}">Sign Up Today!</a>
+                    </small>
+                </div>
+            </div>
+        </fieldset>  
+    </form>
+</div>
 {% endblock content %}

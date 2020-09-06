@@ -23,6 +23,7 @@ urlpatterns = [
     path('ckeditor/',include('ckeditor_uploader.urls')),
     path('',include('posts.urls')),
     path('',include('users.urls')),
+    path('', include('social_django.urls', namespace='social')),
 ]
 
 if settings.DEBUG:

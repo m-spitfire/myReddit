@@ -72,6 +72,25 @@ a.post-title:hover {
   vertical-align: middle;
 }
 
+.oauth-box{
+  margin-bottom: 10px;
+}
+
+.oauth-main{
+  padding-bottom: 15px;
+}
+
+.auth-box{
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 10px;
+  padding-bottom: 30px;
+  overflow: hidden;
+}
+
 .account-img {
   height: 125px;
   width: 125px;
