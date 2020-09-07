@@ -3,7 +3,7 @@ Hi {{user.username}},
 
 Please click on the link below to confirm your registration:
 
-http://{{domain}}{%url 'email_verification_confirm' uidb64=userid token=token%}
+http://{{domain}}{%url 'users:email_verification_confirm' uidb64=userid token=token%}
 
 If this wasn't you disregard this email and no action will be taken.
 {%endautoescape%}

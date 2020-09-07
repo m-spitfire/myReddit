@@ -5,17 +5,44 @@
     <img class="rounded-circle post-img" src="{{ object.author.profile.image.url }}">
     <div class="media-body">
       <div class="post-metadata">
-        <a class="mr-2" href="{% url 'user_posts' object.author.username %}">{{ object.author }}</a>
+        <a class="mr-2" href="{% url 'posts:user_posts' object.author.username %}">{{ object.author }}</a>
         <small class="text-muted">{{ object.date_posted|date:"F d, Y" }}</small>
         {% if object.author == user %}
           <div>
-            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post_update' object.id %}">Update</a>
-            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post_delete' object.id %}">Delete</a>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'posts:post_update' object.id %}">Update</a>
+            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'posts:post_delete' object.id %}">Delete</a>
           </div>
         {% endif %}
       </div>
       <h2 class="post-title">{{ object.title }}</h2>
-      {{ post.content| safe }}
+      {{ object.content| safe }}
+    </article>
+
+      <div class="d-flex justify-content-between" style="padding-bottom: 10px; overflow: hidden;">
+        <div>
+        <h4>{{object.comment_set.count}} Comments{{object.answer_set.count|pluralize}}</h4>
+        </div>
+        <div>
+            <a class="btn btn-outline-secondary btn-sm" href="{%url 'posts:comment_create' object.pk%}">Comment</a>
+        </div>
     </div>
-  </article>
+    {% for comment in object.comment_set.all %}
+    <div>
+        <div>
+            <div>{{comment.content}}</div>
+            {% if comment.author == user %}
+            <div style="padding-top: 15px;" class='float-right'>
+                <small class="text-muted float-right"><a class=" btn btn-outline-secondary btn-sm" href="{%url 'posts:comment_edit' object.pk comment.pk%}">Edit</a>
+                    <a class=" btn btn-outline-secondary btn-sm" href="{%url 'posts:comment_delete' object.pk comment.pk%}">Delete</a>
+                </small>
+            </div>
+            {%else%}
+                <div style="padding-top: 15px;" class='float-right'>
+                    <small class="text-muted">Comment By: <a href="{%url 'posts:user_posts' comment.author.username %}" class="profile-link">{{comment.author}}</a></small></br>
+                    <small class="text-muted">{{comment.date_posted}}</small>
+                </div>
+            {%endif%}
+        </div>
+    </div>
+    {%endfor%}
 {% endblock content %}

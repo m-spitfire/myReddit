@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post
+from .models import Post, Comment
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
@@ -54,3 +55,49 @@ class PostDeleteView(DeleteView):
             return True
         return False
     
+
+class CommentCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = Comment
+    fields = ['content']
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.post = Post.objects.get(id=self.kwargs['post_id'])
+        return super().form_valid(form)
+    
+    def test_func(self):
+        return True
+
+class CommentEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Comment
+    fields = ['content']
+
+    def get_initial(self):
+        initial = super().get_initial()
+        obj = self.get_object()
+        initial['text'] = obj.text
+        return initial
+
+    def get_success_url(self):
+        post = self.object.post
+        return reverse('posts:post_detail', kwargs={'pk':post.id})
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.post = Post.objects.get(id=self.kwargs['post_id'])
+        return super().form_valid(form)
+
+    def test_func(self):
+        comment = self.get_object()
+        return comment.author == self.request.user
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Comment
+
+    def get_success_url(self):
+        post = self.object.post
+        return reverse('posts:post_detail',kwargs={'pk':post.id})
+
+    def test_func(self):
+        comment = self.get_object()
+        return comment.author == self.request.user

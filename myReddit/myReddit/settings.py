@@ -160,8 +160,8 @@ CKEDITOR_CONFIGS = {
 
 CKEDITOR_UPLOAD_PATH = 'image_attachments/'
 
-LOGIN_REDIRECT_URL = 'posts_home'
-LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'posts:posts_home'
+LOGIN_URL = 'users:login'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

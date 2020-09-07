@@ -9,6 +9,7 @@ from django.contrib.auth import login
 from django.contrib.auth.models import User
 from .forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
 from .tokens import account_activation_token
+from posts.models import Post
 
 def register(request):
     if request.method == 'POST':
@@ -25,7 +26,7 @@ def register(request):
                 'token': account_activation_token.make_token(user),
             })
             user.email_user(subject,message)
-            return redirect('email_verification_done')
+            return redirect('users:email_verification_done')
     else:
         form = UserRegistrationForm()
     return render(request, 'users/register.html', {'form': form})
@@ -43,7 +44,7 @@ def email_verification_confirm(request, uidb64, token):
         user.profile.verified_email = True
         user.save()
         login(request, user)
-        return redirect('posts_home')
+        return redirect('posts:posts_home')
     else:
         return render(request,'users/account_activation_invalid.html')
         
@@ -51,7 +52,7 @@ def email_verification_done(request):
     return render(request, 'users/email_verification_done.html')
 
 @login_required
-def profile(request):
+def profile_edit(request):
     if request.method == "POST":
         user_form = UserUpdateForm(request.POST,instance=request.user)
         profile_form = ProfileUpdateForm(request.POST,request.FILES,instance=request.user.profile)
@@ -59,14 +60,21 @@ def profile(request):
             user_form.save()
             profile_form.save()
             messages.success(request,"Your account has been updated")
-            return redirect('profile')
+            return redirect('users:profile')
     else:
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
     
     context = {
         'user_form': user_form,
-        'profile_form':profile_form
+        'profile_form':profile_form,
     }
 
-    return render(request, 'users/profile.html', context=context)
+    return render(request, 'users/profile_edit.html', context=context)
+
+@login_required
+def profile(request):
+    context = {
+        'posts': Post.objects.filter(author=request.user),
+    }
+    return render(request,'users/profile.html',context=context)
