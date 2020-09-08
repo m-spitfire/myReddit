@@ -1,6 +1,9 @@
 # image attachments of posts
 image_attachments/
 
+# for editors
+.vscode/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

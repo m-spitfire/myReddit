@@ -4,45 +4,82 @@
   <article class="media content-section">
     <img class="rounded-circle post-img" src="{{ object.author.profile.image.url }}">
     <div class="media-body">
-      <div class="post-metadata">
+      <div class="post-metadata {% if object.author == user %} d-flex justify-content-between{% endif %}">
+		<div>
         <a class="mr-2" href="{% url 'posts:user_posts' object.author.username %}">{{ object.author }}</a>
         <small class="text-muted">{{ object.date_posted|date:"F d, Y" }}</small>
+		</div>
         {% if object.author == user %}
           <div>
-            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'posts:post_update' object.id %}">Update</a>
-            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'posts:post_delete' object.id %}">Delete</a>
+			  <button class="btn btn-outline-secondary" 
+					  data-toggle="collapse"
+					  data-target=".multi-collapse"
+					  aria-expanded="false"
+					  aria-controls="multiCollapse1 multiCollapse2">
+				  	  <i class="fas fa-ellipsis-v"></i></button>
+			  <div class="row">
+				  <div class="col">
+					  <div class="collapse multi-collapse" id="multiCollapse1">
+						  <a class="btn btn-secondary btn-sm mt-1 mb-1"
+							 href="{% url 'posts:post_update' object.id %}">Update</a>
+					  </div>
+				  </div>
+				  <div class="col">
+					  <div class="collapse multi-collapse" id="multiCollapse2">
+						  <a class="btn btn-danger btn-sm mt-1 mb-1"
+							 href="{% url 'posts:post_delete' object.id %}">Delete</a>
+					  </div>
+				  </div>
+			  </div>
           </div>
         {% endif %}
       </div>
       <h2 class="post-title">{{ object.title }}</h2>
-      {{ object.content| safe }}
+      {{ object.content|safe }}
     </article>
 
       <div class="d-flex justify-content-between" style="padding-bottom: 10px; overflow: hidden;">
         <div>
-        <h4>{{object.comment_set.count}} Comments{{object.answer_set.count|pluralize}}</h4>
+        <h4>{{object.comment_set.count}} Comment{{object.answer_set.count|pluralize}}</h4>
         </div>
         <div>
             <a class="btn btn-outline-secondary btn-sm" href="{%url 'posts:comment_create' object.pk%}">Comment</a>
         </div>
     </div>
     {% for comment in object.comment_set.all %}
-    <div>
-        <div>
-            <div>{{comment.content}}</div>
-            {% if comment.author == user %}
-            <div style="padding-top: 15px;" class='float-right'>
-                <small class="text-muted float-right"><a class=" btn btn-outline-secondary btn-sm" href="{%url 'posts:comment_edit' object.pk comment.pk%}">Edit</a>
-                    <a class=" btn btn-outline-secondary btn-sm" href="{%url 'posts:comment_delete' object.pk comment.pk%}">Delete</a>
-                </small>
-            </div>
-            {%else%}
-                <div style="padding-top: 15px;" class='float-right'>
-                    <small class="text-muted">Comment By: <a href="{%url 'posts:user_posts' comment.author.username %}" class="profile-link">{{comment.author}}</a></small></br>
-                    <small class="text-muted">{{comment.date_posted}}</small>
-                </div>
-            {%endif%}
+    <article class="media content-section">
+        <div class="media-body">
+			<div class="post-metadata  {% if comment.author == request.user %}d-flex justify-content-between{% endif %}">
+				<div>
+					<a class="mr-2" href="{% url 'posts:user_posts' comment.author.username %}">{{ comment.author }}</a><small class="text-muted">{{ comment.date_posted|date:"F d, Y" }}</small>
+				</div>
+				{% if comment.author == request.user %}
+				<div>
+					<button class="btn btn-outline-secondary" 
+					  data-toggle="collapse"
+					  data-target=".multi-collapse"
+					  aria-expanded="false"
+					  aria-controls="multiCollapse1 multiCollapse2">
+				  	  <i class="fas fa-ellipsis-v"></i></button>
+			  		<div class="row">
+				 		<div class="col">
+					  		<div class="collapse multi-collapse" id="multiCollapse1">
+						  		<a class="btn btn-secondary btn-sm mt-1 mb-1"
+							 	   href="{%url 'posts:comment_edit' object.pk comment.pk%}">Edit</a>
+					  		</div>
+				  		</div>
+				  		<div class="col">
+					  		<div class="collapse multi-collapse" id="multiCollapse2">
+						  		<a class=" btn btn-outline-danger btn-sm mt-1 mb-1" href="{% url 'posts:comment_delete' object.pk comment.pk %}">Delete</a>
+					  		</div>
+				  		</div>
+			  		</div>
+				</div>
+			</div>
+            <div>
+				{{comment.content}}
+			</div>
         </div>
-    </div>
+    </article>
     {%endfor%}
 {% endblock content %}
