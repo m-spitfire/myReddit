@@ -12,19 +12,26 @@ rem For running locally you need your `DEBUG` to be `False`
 set DEBUG=False
 set EMAIL_USER=<the_email_for_sending_reset_password>
 set EMAIL_PASSWORD=<password_of_it>
-``` 
+
+```
+
 If you are not using virtual environment just search up _how to add environment variables?_
 
 If you are using Linux or Mac machine you can run `export` command from terminal:
+
 ```bash
-$ export DEBUG=False
-$ export EMAIL_USER=<the_email_for_sending_reset_password>
-$ export EMAIL_PASSWORD=<password_of_it>
+
+$export DEBUG=False
+$export EMAIL_USER=<the_email_for_sending_reset_password>
+$export EMAIL_PASSWORD=<password_of_it>
 ```
+
 But if you do not want to use password reset function you do not need to create environment variables related to `EMAIL`.
 
 After installing all the requirements and setting environment variables move to (`cd` into) the project folder _myReddit_ (using `cd myReddit` from command line) and run
-```
+
+```shell
 python manage.py runserver
 ```
+
 Then you are done! Enjoy the site! If you want to contribute anything just fork the repository and create a pull request. Feel free to do that!

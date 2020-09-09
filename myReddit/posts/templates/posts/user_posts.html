@@ -1,17 +1,18 @@
 {% extends "posts/base.html" %}
 {% block content %}
-    <h1 class="mb-3">Posts by {{ view.kwargs.username }}</h1>
+
+<h1 class="mb-3">Posts by {{ view.kwargs.username }}</>
     {% for post in posts %}
-        <article class="media content-section">
+    <article class="media content-section">
         <img class="rounded-circle post-img" src="{{ post.author.profile.image.url }}">
         <div class="media-body">
             <div class="post-metadata">
-            <a class="mr-2" href="{% url 'posts:user_posts' post.author.username %}">{{ post.author }}</a>
-            <small class="text-muted">{{ post.datePosted|date:"F d, Y" }}</small>
+                <a class="mr-2" href="{% url 'posts:user_posts' post.author.username %}">{{ post.author }}</a>
+                <small class="text-muted">{{ post.datePosted|date:"F d, Y" }}</small>
             </div>
             <h2><a class="post-title" href="{% url 'posts:post_detail' post.id %}">{{ post.title }}</a></h2>
             {{ post.content| safe }}
         </div>
-        </article>
+    </article>
     {% endfor %}
 {% endblock content %}
