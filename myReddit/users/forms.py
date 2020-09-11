@@ -7,11 +7,11 @@ from .models import Profile
 
 class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField()
-    
-    def __init__(self,*args,**kwargs):
+
+    def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
         self.helper.help_text_inline = True
-        super().__init__(*args,**kwargs)
+        super().__init__(*args, **kwargs)
 
     def clean_email(self):
         if User.objects.filter(email=self.cleaned_data['email']).exists():
@@ -20,7 +20,7 @@ class UserRegistrationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username','email','password1','password2']
+        fields = ['username', 'email', 'password1', 'password2']
 
 
 class UserUpdateForm(forms.ModelForm):
@@ -28,7 +28,7 @@ class UserUpdateForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username','email']
+        fields = ['username', 'email']
 
 
 class ProfileUpdateForm(forms.ModelForm):

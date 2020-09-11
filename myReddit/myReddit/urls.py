@@ -19,13 +19,13 @@ from django.conf.urls.static import static
 from django.urls import path, include
 
 urlpatterns = [
+    path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
-    path('ckeditor/',include('ckeditor_uploader.urls')),
-    path('',include('posts.urls',namespace='posts')),
-    path('',include('users.urls',namespace='users')),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
+    path('', include('posts.urls', namespace='posts')),
+    path('', include('users.urls', namespace='users')),
     path('', include('social_django.urls', namespace='social')),
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
-
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

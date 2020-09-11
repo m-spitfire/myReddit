@@ -1,12 +1,17 @@
 # myReddit
+
 This is a project of mine. I inspired by platform Reddit and tried to make a similar platform to it.
 
-### Running locally
-For running locally you need to install requirements. To do this run 
-```
+## Running locally
+
+For running locally you need to install requirements. To do this run
+
+```cmd
 pip install -r requirements.txt
 ```
+
 Then you need to change some settings to run the server locally. First add some enviroment variables.If you are in windows machine and using a virtual environment you can add them using `set` phrase at the end of _activate.bat_ file:
+
 ```bat
 rem For running locally you need your `DEBUG` to be `False`
 set DEBUG=False
@@ -20,7 +25,6 @@ If you are not using virtual environment just search up _how to add environment 
 If you are using Linux or Mac machine you can run `export` command from terminal:
 
 ```bash
-
 $export DEBUG=False
 $export EMAIL_USER=<the_email_for_sending_reset_password>
 $export EMAIL_PASSWORD=<password_of_it>

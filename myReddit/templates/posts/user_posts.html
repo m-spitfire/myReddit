@@ -1,7 +1,7 @@
-{% extends "posts/base.html" %}
+{% extends "base.html" %}
 {% block content %}
 
-<h1 class="mb-3">Posts by {{ view.kwargs.username }}</>
+<h1 class="mb-3">Posts by {{ view.kwargs.username }}</h1>
     {% for post in posts %}
     <article class="media content-section">
         <img class="rounded-circle post-img" src="{{ post.author.profile.image.url }}">

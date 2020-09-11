@@ -1,6 +1,20 @@
-{% extends "posts/base.html" %}
+{% extends "base.html" %}
 {% block content %}
+{% load posts_extras %}
 <article class="media content-section">
+	<div class="float-left" style="padding-right: 10px;">
+		{% if user|has_upvoted_post:object %}
+		<div class="button" ><a style="color:  #f48024;" class= "btn btn-light" href = "{% url 'posts:post_vote' object.id 1 %}"><i class="fa fa-arrow-up" ></i></a></div>
+		{% else %}
+		<div class="button" ><a style = "color:  #131010;" class= "btn btn-light" href = "{% url 'posts:post_vote' object.id 1 %}"><i class="fa fa-arrow-up" ></i></a></div>
+		{% endif %}
+		<div class="votes" style="padding-left: 15px;">{{ object|net_upvotes }}</div>
+		{% if user|has_downvoted_post:object %}
+		<div class="button"><a style = "color:  #f48024;" class= "btn btn-light" href= "{% url 'posts:post_vote' object.id 0 %}"><i class="fa fa-arrow-down"></i></a></div>
+		{% else %}
+		<div class="button"><a style = "color:  #131010;" class= "btn btn-light"href= "{% url 'posts:post_vote' object.id 0 %}"><i class="fa fa-arrow-down"></i></a></div>
+		{% endif %}	
+	</div>
 	<img class="rounded-circle post-img" src="{{ object.author.profile.image.url }}">
 	<div class="media-body">
 		<div class="post-metadata {% if object.author == user %} d-flex justify-content-between{% endif %}">
@@ -10,21 +24,14 @@
 			</div>
 			{% if object.author == user %}
 			<div>
-				<button class="btn btn-outline-secondary" data-toggle="collapse" data-target=".multi-collapse"
-				aria-expanded="false" aria-controls="multiCollapse1 multiCollapse2">
-				<i class="fas fa-ellipsis-v"></i></button>
 				<div class="row">
 					<div class="col">
-						<div class="collapse multi-collapse" id="multiCollapse1">
 							<a class="btn btn-secondary btn-sm mt-1 mb-1"
-							href="{% url 'posts:post_update' object.id %}">Update</a>
-						</div>
+							href="{% url 'posts:post_update' object.id %}">Edit</a>
 					</div>
 					<div class="col">
-						<div class="collapse multi-collapse" id="multiCollapse2">
 							<a class="btn btn-danger btn-sm mt-1 mb-1"
 							href="{% url 'posts:post_delete' object.id %}">Delete</a>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -44,6 +51,19 @@
 	</div>
 	{% for comment in object.comment_set.all %}
 	<article class="media content-section">
+		<div class="float-left" style='padding-right: 10px'>
+			{% if user|has_upvoted_comment:comment %}
+			<div class="button" ><a style = "color:  #f48024;" class= "btn btn-light"href = "{% url 'posts:comment_vote' comment.id 1 %}"><i class="fa fa-arrow-up" ></i></a></div>
+			{% else %}
+			<div class="button" ><a style = "color:  #131010;" class= "btn btn-light"href = "{% url 'posts:comment_vote' comment.id 1 %}"><i class="fa fa-arrow-up" ></i></a></div>
+			{% endif %}
+			<div class="votes" style="padding-left: 15px;">{{ comment.upvotes }}</div>
+			{% if user|has_downvoted_comment:comment %}
+			<div class="button"><a style = "color:  #f48024;"  class= "btn btn-light"href= "{% url 'posts:comment_vote' comment.id 0 %}"><i class="fa fa-arrow-down"></i></a></div>
+			{% else %}
+			<div class="button"><a style = "color:  #131010;" class= "btn btn-light"href= "{% url 'posts:comment_vote' comment.id 0 %}"><i class="fa fa-arrow-down"></i></a></div>
+			{% endif %}
+		</div>	
 		<div class="media-body">
 			<div class="post-metadata  {% if comment.author == request.user %}d-flex justify-content-between{% endif %}">
 				<div>
@@ -53,24 +73,18 @@
 				</div>
 				{% if comment.author == request.user %}
 				<div>
-					<button class="btn btn-outline-secondary" data-toggle="collapse" data-target=".multi-collapse"
-					aria-expanded="false" aria-controls="multiCollapse1 multiCollapse2">
-					<i class="fas fa-ellipsis-v"></i></button>
 					<div class="row">
 						<div class="col">
-							<div class="collapse multi-collapse" id="multiCollapse1">
 								<a class="btn btn-secondary btn-sm mt-1 mb-1"
-								href="{%url 'posts:comment_edit' object.pk comment.pk%}">Edit</a>
-							</div>
+								href="{%url 'posts:comment_edit' object.pk comment.pk %}">Edit</a>
 						</div>
 						<div class="col">
-							<div class="collapse multi-collapse" id="multiCollapse2">
 								<a class=" btn btn-outline-danger btn-sm mt-1 mb-1"
 								href="{% url 'posts:comment_delete' object.pk comment.pk %}">Delete</a>
-							</div>
 						</div>
 					</div>
 				</div>
+				{% endif %}
 			</div>
 			<div>
 				<p>{{comment.content}}</p>
