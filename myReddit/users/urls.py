@@ -2,7 +2,7 @@ from django.urls import path
 from django.contrib.auth import views
 from .views import (
     register,
-    profile,
+    Profile,
     profile_edit,
     email_verification_confirm,
     email_verification_done
@@ -29,5 +29,5 @@ urlpatterns = [
     path('email_verification_confirm/<uidb64>/<token>', email_verification_confirm, name='email_verification_confirm'),
     path('email_verification_done/', email_verification_done, name='email_verification_done'),
     path('edit/profile/', profile_edit, name='profile_edit'),
-    path('profile/', profile, name='profile'),
+    path('profile/<str:username>/', Profile.as_view(), name='profile'),
 ]

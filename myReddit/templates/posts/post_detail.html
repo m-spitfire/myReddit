@@ -1,95 +1,113 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base/base.html" %}
 {% load posts_extras %}
-<article class="media content-section">
-	<div class="float-left" style="padding-right: 10px;">
-		{% if user|has_upvoted_post:object %}
-		<div class="button" ><a style="color:  #f48024;" class= "btn btn-light" href = "{% url 'posts:post_vote' object.id 1 %}"><i class="fa fa-arrow-up" ></i></a></div>
-		{% else %}
-		<div class="button" ><a style = "color:  #131010;" class= "btn btn-light" href = "{% url 'posts:post_vote' object.id 1 %}"><i class="fa fa-arrow-up" ></i></a></div>
-		{% endif %}
-		<div class="votes" style="padding-left: 15px;">{{ object|net_upvotes }}</div>
-		{% if user|has_downvoted_post:object %}
-		<div class="button"><a style = "color:  #f48024;" class= "btn btn-light" href= "{% url 'posts:post_vote' object.id 0 %}"><i class="fa fa-arrow-down"></i></a></div>
-		{% else %}
-		<div class="button"><a style = "color:  #131010;" class= "btn btn-light"href= "{% url 'posts:post_vote' object.id 0 %}"><i class="fa fa-arrow-down"></i></a></div>
-		{% endif %}	
-	</div>
-	<img class="rounded-circle post-img" src="{{ object.author.profile.image.url }}">
-	<div class="media-body">
-		<div class="post-metadata {% if object.author == user %} d-flex justify-content-between{% endif %}">
-			<div>
-				<a class="mr-2" href="{% url 'posts:user_posts' object.author.username %}">{{ object.author }}</a>
-				<small class="text-muted">{{ object.date_posted|date:"F d, Y" }}</small>
-			</div>
-			{% if object.author == user %}
-			<div>
-				<div class="row">
-					<div class="col">
-							<a class="btn btn-secondary btn-sm mt-1 mb-1"
-							href="{% url 'posts:post_update' object.id %}">Edit</a>
-					</div>
-					<div class="col">
-							<a class="btn btn-danger btn-sm mt-1 mb-1"
-							href="{% url 'posts:post_delete' object.id %}">Delete</a>
-					</div>
-				</div>
-			</div>
+{% block title %} {{ object.title }} {% endblock title %}
+
+
+{% block navbar %}
+{% include 'base/navbar.html' %}
+{% endblock navbar %}
+
+{% block main %}
+<div class="box">
+	<article class="media">
+		<div class="media-left">
+			{% if user|has_upvoted_post:object %}
+			<div class="icon has-text-centered"><a style="color:  #f48024;"
+					href="{% url 'posts:post_vote' object.id 1 %}"><i class="fa fa-arrow-up"></i></a></div>
+			{% else %}
+			<div class="icon has-text-centered"><a style="color:  #131010;"
+					href="{% url 'posts:post_vote' object.id 1 %}"><i class="fa fa-arrow-up"></i></a></div>
+			{% endif %}
+			<div class="has-text-centered">{{ object|net_upvotes }}</div>
+			{% if user|has_downvoted_post:object %}
+			<div class="icon has-text-centered"><a style="color:  #f48024;"
+					href="{% url 'posts:post_vote' object.id 0 %}"><i class="fa fa-arrow-down"></i></a></div>
+			{% else %}
+			<div class="icon has-text-centered"><a style="color:  #131010;"
+					href="{% url 'posts:post_vote' object.id 0 %}"><i class="fa fa-arrow-down"></i></a></div>
 			{% endif %}
 		</div>
-		<h2 class="post-title">{{ object.title }}</h2>
-		{{ object.content|safe }}
+		<div class="media-content">
+			<div class="content">
+				<nav class="level">
+					<div class="level-left">
+						<div class="level-item">
+							<a
+								href="{% url 'users:profile' post.author.username %}"><strong>{{ object.author }}</strong></a>
+							<small>{{ object.datePosted|date:"F d, Y" }}</small>
+						</div>
+					</div>
+					{% if object.author == request.user %}
+						<div class="level-right">
+							<a href="{% url 'posts:post_update' object.id %}">
+								<button class="button is-white" aria-haspopup="true" aria-controls="options">
+									<div class="icon">
+										<i class="fas fa-ellipsis-v"></i>
+									</div>
+								</button>
+							</a>						
+						</div>
+					{% endif %}
+				</nav>
+				<h3 class="title is-3">{{ object.title }}</h3>
+				{{ object.content|safe }}
+			</div>
+		</div>
 	</article>
-	
-	<div class="d-flex justify-content-between" style="padding-bottom: 10px; overflow: hidden;">
-		<div>
-			<h4>{{object.comment_set.count}} Comment{{object.answer_set.count|pluralize}}</h4>
-		</div>
-		<div>
-			<a class="btn btn-outline-secondary btn-sm" href="{%url 'posts:comment_create' object.pk%}">Comment</a>
-		</div>
+</div>
+<nav class="level">
+	<div class="level-left">
+		<h4>{{ object.comment_set.count }} Comment{{ object.comment_set.count|pluralize }}</h4>
 	</div>
-	{% for comment in object.comment_set.all %}
-	<article class="media content-section">
-		<div class="float-left" style='padding-right: 10px'>
-			{% if user|has_upvoted_comment:comment %}
-			<div class="button" ><a style = "color:  #f48024;" class= "btn btn-light"href = "{% url 'posts:comment_vote' comment.id 1 %}"><i class="fa fa-arrow-up" ></i></a></div>
-			{% else %}
-			<div class="button" ><a style = "color:  #131010;" class= "btn btn-light"href = "{% url 'posts:comment_vote' comment.id 1 %}"><i class="fa fa-arrow-up" ></i></a></div>
-			{% endif %}
-			<div class="votes" style="padding-left: 15px;">{{ comment.upvotes }}</div>
-			{% if user|has_downvoted_comment:comment %}
-			<div class="button"><a style = "color:  #f48024;"  class= "btn btn-light"href= "{% url 'posts:comment_vote' comment.id 0 %}"><i class="fa fa-arrow-down"></i></a></div>
-			{% else %}
-			<div class="button"><a style = "color:  #131010;" class= "btn btn-light"href= "{% url 'posts:comment_vote' comment.id 0 %}"><i class="fa fa-arrow-down"></i></a></div>
-			{% endif %}
-		</div>	
-		<div class="media-body">
-			<div class="post-metadata  {% if comment.author == request.user %}d-flex justify-content-between{% endif %}">
-				<div>
-					<a class="mr-2"
-					href="{% url 'posts:user_posts' comment.author.username %}">{{ comment.author }}</a><small
-					class="text-muted">{{ comment.date_posted|date:"F d, Y" }}</small>
+	<div class="level-right">
+		<a class="button is-outlined is-link" href="{% url 'posts:comment_create' object.pk %}">Comment</a>
+	</div>
+</nav>
+
+{% for comment in object.comment_set.all %}
+<article class="media">
+	<div class="media-left">
+		{% if user|has_upvoted_comment:comment %}
+		<div class="icon has-text-centered"><a style="color:  #f48024;"
+				href="{% url 'posts:comment_vote' comment.id 1 %}"><i class="fa fa-arrow-up"></i></a></div>
+		{% else %}
+		<div class="icon has-text-centered"><a style="color:  #131010;"
+				href="{% url 'posts:comment_vote' comment.id 1 %}"><i class="fa fa-arrow-up"></i></a></div>
+		{% endif %}
+		<div class="has-text-centered">{{ comment.upvotes }}</div>
+		{% if user|has_downvoted_comment:comment %}
+		<div class="icon has-text-centered"><a style="color:  #f48024;"
+				href="{% url 'posts:comment_vote' comment.id 0 %}"><i class="fa fa-arrow-down"></i></a></div>
+		{% else %}
+		<div class="icon has-text-centered"><a style="color:  #131010;"
+				href="{% url 'posts:comment_vote' comment.id 0 %}"><i class="fa fa-arrow-down"></i></a></div>
+		{% endif %}
+	</div>
+	<div class="media-content">
+		<div class="content">
+			<nav class="level mb-0">
+				<div class="level-left">
+					<div class="level-item">
+						<a
+							href="{% url 'users:profile' post.author.username %}"><strong>{{ comment.author }}</strong></a>
+						<small>{{ object.date_posted|date:"F d, Y" }}</small>
+					</div>
 				</div>
 				{% if comment.author == request.user %}
-				<div>
-					<div class="row">
-						<div class="col">
-								<a class="btn btn-secondary btn-sm mt-1 mb-1"
-								href="{%url 'posts:comment_edit' object.pk comment.pk %}">Edit</a>
+				<div class="level-right">
+					= <a class="button is-white" aria-haspopup="true" aria-controls="edit"
+						href="{% url 'posts:comment_edit' object.pk comment.id %}">
+						<div class="icon is-large">
+							<i class="fas fa-cog"></i>
 						</div>
-						<div class="col">
-								<a class=" btn btn-outline-danger btn-sm mt-1 mb-1"
-								href="{% url 'posts:comment_delete' object.pk comment.pk %}">Delete</a>
-						</div>
-					</div>
+					</a>
 				</div>
 				{% endif %}
-			</div>
-			<div>
-				<p>{{comment.content}}</p>
-			</div>
+			</nav>
+			<p>{{ comment.content }}</p>
 		</div>
-	</article>
-	{% endfor %}
-{% endblock content %}
+	</div>
+</article>
+{% endfor %}
+
+{% endblock main %}

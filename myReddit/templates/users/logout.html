@@ -1,9 +1,25 @@
-{% extends "base.html" %}
-{% block content %}
-    <h2>You have logget out</h2>
-    <div class="border-top pt-3">
-        <small class="text-muted">
+{% extends "base/base.html" %}
+
+{% block title %}Logged out{% endblock title %}
+
+{% block navbar %}
+    {% include 'base/navbar.html' %}
+{% endblock navbar %}
+    
+{% block main %}
+    <h2>You have logged out</h2>
+    <div>
+        <small>
             <a href="{% url 'users:login' %}">Log in</a> again
         </small>
     </div>
-{% endblock content %}
+{% endblock main %}
+
+{% block footer %}
+    <br>
+    <br>
+    <br>
+    <br>
+    {{ block.super }}
+{% endblock footer %}
+    

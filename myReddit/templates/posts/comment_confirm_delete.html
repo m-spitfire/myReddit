@@ -1,18 +1,25 @@
-{% extends "base.html" %}
-{% block content %}
-<div class="content-section">
+{% extends "base/base.html" %}
+
+{% block title %}Confirm delete{% endblock title %}
+
+{% block navbar %}
+	{% include 'base/navbar.html' %}
+{% endblock navbar %}
+    
+{% block main %}
+<div class="content">
     <form method="POST">
         {% csrf_token %}
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4">
+        <fieldset class="field">
+            <legend class="mb-4">
                 Are you sure you want to delete that comment?
             </legend>
         </fieldset>
-        <div class="form-group"><button class="btn btn-outline-danger" type="submit">Delete</button>
-            <a class="btn btn-outline-secondary" style="margin-left: 20px;" href="{% url 'posts:post_detail' object.post.id %}">Cancel</a>
+        <div class="field">
+            <button class="button is-outlined" type="submit">Delete</button>
+            <a class="button is-outlined is-light" style="margin-left: 20px;" href="javascript:history.back()">Cancel</a>
         </div>
-
     </form>
 </div>
 
-{% endblock content %}
+{% endblock main %}

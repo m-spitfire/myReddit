@@ -16,13 +16,14 @@
     <form method="POST">
         {% csrf_token %}
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Create a Post</legend>
+            <legend class="border-bottom mb-4">Edit the Post</legend>
             {{ form|crispy }}
         </fieldset>
         <div class="level">
             <div class="level-right">
                 <div class="buttons">
-                    <button class="button is-outlined is-info" type="submit">Post</button>
+                    <button class="button is-outlined is-info" type="submit">Save</button>
+                    <a href="{% url 'posts:post_delete' object.pk %}" class="button is-outlined is-danger">Delete</a>
                 </div>
             </div>
         </div>

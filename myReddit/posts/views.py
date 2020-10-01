@@ -9,7 +9,6 @@ from django.views.generic import (
 )
 from django.views.generic import RedirectView
 from .models import Post, Comment
-from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
@@ -21,17 +20,6 @@ class PostListView(ListView):
 
 class PostDetailView(DetailView):
     model = Post
-
-
-class UserPostListView(ListView):
-    model = Post
-    template_name = "posts/user_posts.html"
-    context_object_name = 'posts'
-    ordering = ['-datePosted']
-
-    def get_queryset(self):
-        user = get_object_or_404(User, username=self.kwargs.get('username'))
-        return Post.objects.filter(author=user).order_by('-datePosted')
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
@@ -46,6 +34,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     fields = ['title', 'content']
+    template_name_suffix = "_update_form"
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -53,9 +42,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         post = self.get_object()
-        if self.request.user == post.author:
-            return True
-        return False
+        return self.request.user == post.author
 
 
 class PostDeleteView(DeleteView):
@@ -109,14 +96,14 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class CommentEditView(LoginRequiredMixin, UpdateView):
+class CommentEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Comment
     fields = ['content']
 
     def get_initial(self):
         initial = super().get_initial()
         obj = self.get_object()
-        initial['text'] = obj.text
+        initial['content'] = obj.content
         return initial
 
     def get_success_url(self):

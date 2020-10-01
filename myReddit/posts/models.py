@@ -35,6 +35,9 @@ class Comment(models.Model):
     upvoters = models.ManyToManyField(User, related_name="comment_upvotes")
     downvoters = models.ManyToManyField(User, related_name="comment_downvotes")
 
+    class Meta:
+        ordering = ['upvotes']
+
     def __str__(self):
         return f"Comment {self.pk}"
 

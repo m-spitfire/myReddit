@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'six',
     'social_django',
+    'django_simple_bulma',
     # major apps
     'posts.apps.PostsConfig',
     'users.apps.UsersConfig',
@@ -146,10 +147,34 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django_simple_bulma.finders.SimpleBulmaFinder',
+]
+
+# django-simple-bulma settings
+BULMA_SETTINGS = {
+    "variables": {
+        "primary": "#2482c1",
+        "green": "#32ac66",
+        "turquoise": "#7289DA",
+        "blue": "#2482c1",
+        "cyan": "#2482c1",
+        "purple": "#aa55e4",
+        "red": "#d63852",
+
+        "link": "$primary",
+
+        "dimensions": "16 24 32 48 64 96 128 256 512",  # Possible image dimensions
+        "navbar-height": "4.75rem",
+        "footer-padding": "1rem 1.5rem 1rem",
+    }
+}
+
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'

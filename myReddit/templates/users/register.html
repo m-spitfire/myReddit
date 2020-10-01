@@ -1,33 +1,50 @@
-{% extends "base.html" %}
+{% extends "base/base.html" %}
 {% load crispy_forms_tags %}
-{% block content %}
-    <div class="content-section">
+
+{% block head %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+{% endblock head %}
+
+{% block navbar %}
+    {% include 'base/navbar.html' %}
+{% endblock navbar %}
+    
+{% block main %}
+    <div class="content-section pd-8">
         <form method="POST">
             {% csrf_token %}
-            <fieldset class="form-group">
+            <fieldset class="field-group">
                 <legend class="border-bottom mb-4">Join Now</legend>
-                <div class="row">
-                    <div class="col-md-3 oauth-box">
-                        <a class="btn btn-outline-dark" href="{% url 'social:begin' 'google-oauth2' %}" role="button"
+                <div class='oauth-main' style="text-align: center;margin-bottom: 20px;">
+                    <div class="buttons">
+                        <a class="button is-outlined is-dark"
+                            href="{% url 'social:begin' 'google-oauth2' %}" role="button"
                             style="text-transform:none">
                             <i class="fab fa-google" width="20px" style="margin-bottom:3px; margin-right:5px"></i>
-
                             Continue with Google
                         </a>
                     </div>
                 </div>
-                <div class='auth-box'>
-                    <p> {{ form|crispy }}</p>
-                    <div class="form-group">
-                        <button class="btn btn-outline-info" type="submit">Sign Up</button>
+                <div style="border-width: 1px; border-style: solid; border-radius: 5px;">
+                    <p>{{ form|crispy }}</p>
+                    <div class="buttons" style="text-align: center;">
+                        <button class="button is-outlined is-info" type="submit">Sign Up</button>
                     </div>
-                </div>
-                <div class="border-top pt-3">
-                    <small class="text-muted">
-                        Already Have An Account? <a class="ml-2" href="{% url 'users:login' %}">Sign In</a>
-                    </small>
-                </div>    
+                    <nav class="level">
+                        <div class="level-right">
+                            <small>
+                                Already have an account? <a class="ml-2" href="{% url 'users:login' %}">Log in</a>.
+                            </small>
+                        </div>
+                    </nav>
+                </div>  
             </fieldset>
         </form>  
     </div>
-{% endblock content %}
+{% endblock main %}
+
+{% block script %}
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+{% endblock script %}

@@ -1,0 +1,48 @@
+{% load static %}
+{% load django_simple_bulma %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Responsive meta tags -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Bulma and FontAwesome CSS -->
+    
+    {% bulma %}
+    {% font_awesome %}
+    {% block head %}{% endblock head %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Lily+Script+One&family=Montserrat&family=Playfair+Display&display=swap" rel="stylesheet">
+    <title>myreddit |{% block title %} Website {% endblock title %}</title>
+  </head>
+  <body class="has-navbar-fixed-top">
+    {% block navbar %}{% endblock navbar %}
+    <main>
+      <div class="container mt-4">
+        {% if messages %}
+          {% for message in messages %}
+            <div class="notification {% if message.tags %}is-{{ message.tags }}{% endif %}">
+              <button class="delete"></button>
+
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+        <div class="columns">
+          <div class="column is-four-fifths">
+            {% block main %} {% endblock main %}
+          </div>
+          <div id="sidebar" class="column is-one-fifth">
+            {% block sidebar %} {% endblock sidebar %}
+          </div>
+        </div>
+      </div>
+    </main>
+    {% block footer %}
+      {% include 'base/footer.html' %}
+    {% endblock footer %}      
+    <!-- Javascript -->
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block script %}{% endblock script %}
+  </body>
+</html>

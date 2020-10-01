@@ -1,34 +1,60 @@
-{% extends "base.html" %}
-{% load crispy_forms_tags %}
-{% block content %}
-    <div class="content-section">
-      <div class="media">
-        <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
-        <div class="media-body">
-          <div class="d-flex justify-content-between">
-            <div>
-              <h2 class="account-heading">{{ user.username }}</h2>
-            </div>
-            <div>
-              <a style="color:slategray;" class="btn btn-sm mt-1 mb-1" href="{% url 'users:profile_edit' %}"><i class="fas fa-cog"></i></a>
-            </div>
-          </div>
-          <p class="text-secondary">{{ user.email }}</p>
-        </div>
-      </div>  
+{% extends "base/base.html" %}
+
+{% block navbar %}
+{% include 'base/navbar.html' %}
+{% endblock navbar %}
+
+{% block main %}
+<div class="content">
+  <div class="media">
+    <div class="media-left">
+      <figure class="image is-128x128">
+        <img class="is-rounded" src="{{ user_requested.profile.image.url }}">
+      </figure>
     </div>
-    <h1 class="mb-3">Posts</h1>
-    {% for post in posts %}
-        <article class="media content-section">
-        <img class="rounded-circle post-img" src="{{ post.author.profile.image.url }}">
-        <div class="media-body">
-            <div class="post-metadata">
-            <a class="mr-2" href="{% url 'posts:user_posts' post.author.username %}">{{ post.author }}</a>
-            <small class="text-muted">{{ post.datePosted|date:"F d, Y" }}</small>
-            </div>
-            <h2><a class="post-title" href="{% url 'posts:post_detail' post.id %}">{{ post.title }}</a></h2>
-            {{ post.content| safe }}
+    <div class="media-content">
+      <h2 class="title is-4">{{ user_requested }}</h2>
+      {% if user == user_requested %}
+      <h3 class="subtitle is-6  ">{{ user_requested.email }}</h3>
+      {% endif %}
+    </div>
+    <div class="media-right">
+      <div class="icon">
+        <a href="{% url 'users:profile_edit' %}"><i class="fas fa-cog"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+<h1 class="title mb-3">Posts</h1>
+{% for post in posts %}
+<div class="box">
+  <article class="media">
+    <div class="media-left">
+      <figure class="image is-64x64">
+        <img src="{{ post.author.profile.image.url }}" class="is-rounded">
+      </figure>
+    </div>
+    <div class="media-content">
+      <div class="content">
+        <p>
+          <a href="{% url 'users:profile' post.author.username %}"><strong>{{ post.author }}</strong></a>
+          <small>{{ post.datePosted|date:"F d, Y" }}</small>
+          <br>
+          <h3 class="title is-3">{{ post.title }}</h3>
+        </p>
+        {{ post.content|safe }}
+      </div>
+      <nav class="level is-mobile">
+        <div class="level-left">
+          <a class="level-item" href="{% url 'posts:comment_create' post.pk %}" aria-label="comment">
+            <span class="icon is-small">
+              <i class="fas fa-reply" aria-hidden="true"></i>
+            </span>
+          </a>
         </div>
-      </article>
-    {% endfor %}
-{% endblock content %}
+      </nav>
+    </div>
+  </article>
+</div>
+{% endfor %}
+{% endblock main %}

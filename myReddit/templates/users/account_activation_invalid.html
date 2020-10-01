@@ -1,4 +1,11 @@
-{% extends 'base.html' %}
-{% block content %}
-<p class = "alert alert-info">The link is invalid. <small class='float-right'><a href ="{%url 'users:register'%}">Signup Again?</a></small></p>
+{% extends "base/base.html" %}
+
+{% block title %}
+    Invalid link
+{% endblock title %}
+
+{% block main %}
+<div class="notification is-info">
+    The link is invalid. <small><a href ="{% url 'users:register' %}">Signup Again?</a></small>
+</div>
 {% endblock %}

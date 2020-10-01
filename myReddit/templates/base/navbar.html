@@ -1,0 +1,55 @@
+<nav class="navbar is-fixed-top is-primary" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a href="{% url 'posts:posts_home' %}" class="navbar-item logo">
+      myReddit
+    </a>
+    <a
+      role="button"
+      class="navbar-burger burger"
+      aria-label="menu"
+      aria-expanded="false"
+      data-target="navbarToggled"
+    >
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div id="navbarToggled" class="navbar-menu"> 
+    <div class="navbar-end">
+      {% if user.is_authenticated %}
+      <div class="navbar-item">
+        <a href="{% url 'posts:post_create' %}" class="button is-primary">
+          New Post
+        </a>
+      </div>
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          <i class="fas fa-user"></i>
+        </a>
+
+        <div class="navbar-dropdown is-right">
+          <a href="{% url 'users:profile' user.username %}" class="navbar-item">
+            Profile
+          </a>
+          <a href="{% url 'users:logout' %}" class="navbar-item">
+            Logout
+          </a>
+        </div>
+      </div>
+      {% else %}
+      <div class="navbar-item">
+        <div class="buttons">
+          <a href="{% url 'users:register' %}" class="button is-success">
+            Register
+          </a>
+          <a href="{% url 'users:login' %}" class="button is-light">
+            Login
+          </a>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</nav>

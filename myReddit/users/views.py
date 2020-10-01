@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_text
+from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.contrib.auth.models import User
@@ -27,7 +28,7 @@ def register(request):
                 'token': account_activation_token.make_token(user),
             })
             user.email_user(subject, message)
-            return redirect('users:email_verification_done')
+            return redirect('users:email_verification_done',)
     else:
         form = UserRegistrationForm()
     return render(request, 'users/register.html', {'form': form})
@@ -63,7 +64,7 @@ def profile_edit(request):
             user_form.save()
             profile_form.save()
             messages.success(request, "Your account has been updated")
-            return redirect('users:profile')
+            return redirect('users:profile', username=request.user.username)
     else:
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
@@ -76,9 +77,17 @@ def profile_edit(request):
     return render(request, 'users/profile_edit.html', context=context)
 
 
-@login_required
-def profile(request):
-    context = {
-        'posts': Post.objects.filter(author=request.user),
-    }
-    return render(request, 'users/profile.html', context=context)
+class Profile(ListView):
+    model = Post
+    template_name = "users/profile.html"
+    context_object_name = 'posts'
+    ordering = ['-datePosted']
+
+    def get_queryset(self):
+        user = get_object_or_404(User, username=self.kwargs.get('username'))
+        return Post.objects.filter(author=user).order_by('-datePosted')
+
+    def get_context_data(self, **kwargs):
+        context = super(Profile, self).get_context_data(**kwargs)
+        context['user_requested'] = get_object_or_404(User, username=self.kwargs.get('username'))
+        return context

@@ -1,4 +1,14 @@
-{% extends 'base.html' %}
-{% block content %}
-<p class = "alert alert-info">An Email has been sent with link to confirm registration.</p>
+{% extends "base/base.html" %}
+
+{% block title %}
+    Email sent
+{% endblock title %}
+{% block navbar %}
+	{% include 'base/navbar.html' %}
+{% endblock navbar %}
+
+{% block main %}
+<div class="notification is-info">
+    An Email has been sent with link to confirm registration.
+</div>
 {% endblock %}

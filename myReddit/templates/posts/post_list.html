@@ -1,16 +1,61 @@
-{% extends "base.html" %}
-{% block content %}
-    {% for post in posts %}
-        <article class="media content-section">
-            <img class="rounded-circle post-img" src="{{ post.author.profile.image.url }}">
-            <div class="media-body">
-                <div class="post-metadata">
-                    Posted by <a class="mr-2" href="{% url 'posts:user_posts' post.author.username %}">{{ post.author }}</a>
-                    <small class="text-muted">{{ post.datePosted|date:"F d, Y" }}</small>   
-                </div>
-                <h2><a class="post-title" href="{% url 'posts:post_detail' post.id %}">{{ post.title }}</a></h2>
-                {{ post.content| safe }}
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %} Home {% endblock title %}
+
+{% block navbar %}
+{% include 'base/navbar.html' %}
+{% endblock navbar %}
+
+{% block main %}
+<h2 class="title mb-2">Latest Posts</h2>
+{% for post in posts %}
+
+<div class="box">
+    <article class="media">
+        <div class="media-content">
+            <div class="content">
+                <p>
+                    <a href="{% url 'users:profile' post.author.username %}"><strong>{{ post.author }}</strong></a>
+                    <small>{{ post.datePosted|date:"F d, Y" }}</small>
+                    <br>
+                    <h3 class="title is-3 mt-0"><a href="{% url 'posts:post_detail' post.pk %}">{{ post.title }}</a>
+                    </h3>
+                </p>
+                {{ post.content|safe }}
             </div>
-        </article>
-    {% endfor %}
-{% endblock content %}
+            <nav class="level is-mobile">
+                <div class="level-left">
+                    <a class="level-item" href="{% url 'posts:comment_create' post.pk %}" aria-label="comment">
+                        <span class="icon is-small">
+                            <i class="fas fa-reply" aria-hidden="true"></i>
+                        </span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </article>
+</div>
+{% endfor %}
+<div class="has-text-centered">
+    <h2 class="title is-3">You have checked all the posts</h2>
+</div>
+{% endblock main %}
+
+{% block sidebar %}
+<article class="message">
+    <div class="message-header">
+        <p>Home</p>
+    </div>
+    <div class="message-body">
+        <div class="content">
+            Your myReddit frontpage. Come here to check in with newest posts.
+        </div>
+        <a style="text-decoration: none;" href="{% url 'posts:post_create' %}">
+            <button class="button is-primary is-fullwidth">
+                New Post
+            </button>
+        </a>
+    </div>
+</article>
+{% endblock sidebar %}

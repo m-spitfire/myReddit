@@ -1,0 +1,36 @@
+{% load static %}
+<footer class="footer has-background-dark has-text-light">
+    <div class="content has-text-centered">
+      <p>
+        &copy; {% now "Y" %}
+        <a
+          href="https://github.com/spitfire-hash"
+          class="author has-text-weight-bold"
+        >
+          Murad Bashirov
+        </a>
+        <br />
+        Built with
+      </p>
+    </div>
+    <div class="columns is-centered is-vcentered">
+      <div class="column is-narrow has-text-centered">
+        <a target="_blank" href="https://djangoproject.com">
+          <img
+            src="{% static 'images/django-logo-negative.png' %}"
+            alt="django logo"
+            width="100px"
+          />
+        </a>
+      </div>
+      <div class="column is-desktop is-narrow has-text-centered">
+        <a target="_blank" href="https://bulma.io">
+          <img
+            src="{% static 'images/made-with-bulma.png' %}"
+            alt="made with bulma"
+            width="120px"
+          />
+        </a>
+      </div>
+    </div>
+  </footer>

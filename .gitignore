@@ -1,6 +1,9 @@
 # image attachments of posts
 image_attachments/
 
+staticfiles/
+media/
+
 # for editors
 .vscode/
 
